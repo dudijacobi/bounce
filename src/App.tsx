@@ -7,12 +7,24 @@ import "./App.css";
 function App() {
   const [history, setHistory] = useState<ResultType[]>([]);
 
-  const avarage = history.length && history.reduce((a, b) => {
-    if (typeof b.result === "string") {
-      return a + b.result.split(",").length;
-    }
-    return a + b.result;
-  }, 0).toFixed(0);
+  const averageAcc =
+    history.length > 0 &&
+    history.reduce(
+      (a, b) => {
+        if (typeof b.result === "string") {
+          const result = b.result.split(",");
+          const sum = result.reduce((a, b) => Number(a) + Number(b), 0);
+          return { sum: a.sum + sum, count: a.count + result.length };
+        }
+
+        return { sum: a.sum + b.result, count: a.count + 1 };
+      },
+      { count: 0, sum: 0 }
+    );
+    
+  const average = averageAcc
+    ? (averageAcc.sum / averageAcc.count).toFixed(0)
+    : 0;
 
   useEffect(() => {
     const rollHistory = localStorage.getItem("rollHistory");
@@ -38,7 +50,7 @@ function App() {
         <p>Dice Rolling</p>
       </header>
       <Dice addToHistory={addToHistory} />
-      <p>Average: {avarage || 0}</p>
+      <p>Average: {average || 0}</p>
       <button onClick={clearHistory}>Clear History</button>
       <ResultsTable history={history} />
     </div>
