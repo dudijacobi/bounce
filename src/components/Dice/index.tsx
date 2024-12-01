@@ -18,9 +18,10 @@ const Dice = ({ addToHistory }: Props) => {
       setLoading(true);
       const { dice, timestamp } = await getRandomDice();
       const formatedDate = timestamp.toISOString().split("T")[1].slice(0, 8);
+
       addToHistory({
         timestamp: formatedDate,
-        result: dice[0],
+        result: dice.length > 1 ? dice.toString() : dice,
       });
       setNumber(dice[dice.length - 1]);
     } catch (error) {
@@ -33,6 +34,9 @@ const Dice = ({ addToHistory }: Props) => {
     const newNumber = Math.floor(Math.random() * 6) + 1;
     const date = new Date();
     const formatedDate = date.toISOString().split("T")[1].slice(0, 8);
+    const arrayOfDices = Array.from({ length: numberOfRolls }).map(
+      () => Math.floor(Math.random() * 6) + 1
+    );
 
     const result =
       numberOfRolls > 1
@@ -46,7 +50,9 @@ const Dice = ({ addToHistory }: Props) => {
       result: result,
     });
 
-    setNumber(newNumber);
+    setNumber(
+      numberOfRolls > 1 ? newNumber : arrayOfDices[arrayOfDices.length - 1]
+    );
   };
 
   return (
