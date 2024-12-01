@@ -1,0 +1,14 @@
+.results-table {
+  width: 40%;
+  margin: 25px;
+
+  tr {
+    text-align: center;
+  }
+}
+
+table,
+th,
+td {
+  border: 1px solid;
+}
